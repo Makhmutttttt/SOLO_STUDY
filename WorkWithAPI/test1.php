@@ -8,9 +8,8 @@ $num_questions = 20;
 $stream = false;
 $url = "https://openrouter.ai/api/v1/chat/completions";
 
-$api_key = "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";
+$api_key = "API key";
 
-// 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
 // Формируем промпт
 $prompt = "Составь тест по предмету '$subject' на тему '$topic'. 
 Тест должен состоять из $num_questions вопросов. 
