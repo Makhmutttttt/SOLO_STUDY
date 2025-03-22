@@ -2,7 +2,7 @@
 
 $stream = false;
 $url = "https://proxy.tune.app/chat/completions";
-$api_key = "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"; // НЕ храните API-ключ в коде!
+$api_key = "НЕ храните API-ключ в коде!"; // 
 
 $data = [
     "temperature" => 0.8,
