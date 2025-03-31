@@ -23,11 +23,13 @@ class TestController extends Controller
         $request->validate([
             'subject' => 'required|string|max:255',
             'topic' => 'required|string|max:255',
+            'difficult_level' => 'required|string|max:255',
             'num_questions' => 'required|integer|min:1|max:50',
         ]);
 
         $subject = $request->input('subject');
         $topic = $request->input('topic');
+        $difficult_level = $request->input('difficult_level');
         $numQuestions = $request->input('num_questions');
 
         // Создаем тест в БД, но пока без вопросов
@@ -36,6 +38,7 @@ class TestController extends Controller
             'description' => "Автоматически сгенерированный тест",
             'status' => 'pending', // Указываем статус, пока ждем AI
             'user_id' => auth()->id(),
+            'difficult_level' => $difficult_level,
             'num_questions' => $numQuestions, // ✅ Сохраняем в БД
         ]);
 
@@ -43,7 +46,7 @@ class TestController extends Controller
         Log::info('Создан тест', ['test_id' => $test->id]);
 
         // Запускаем задачу в очередь
-        ProcessAiRequest::dispatch($test->id, $subject, $topic, $numQuestions);
+        ProcessAiRequest::dispatch($test->id, $subject, $topic, $difficult_level, $numQuestions);
 
         // return redirect()->route('tests.index')->with('status', 'Тест создается. Обновите страницу позже.');
         return response()->json([

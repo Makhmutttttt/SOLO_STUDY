@@ -19,13 +19,15 @@ class ProcessAiRequest implements ShouldQueue
     protected $testId;
     protected $subject;
     protected $topic;
+    protected $difficult_level;
     protected $numQuestions;
 
-    public function __construct($testId, $subject, $topic, $numQuestions)
+    public function __construct($testId, $subject, $topic, $difficult_level, $numQuestions)
     {
         $this->testId = $testId;
         $this->subject = $subject;
         $this->topic = $topic;
+        $this->difficult_level = $difficult_level;
         $this->numQuestions = $numQuestions;
     }
 
@@ -36,9 +38,8 @@ class ProcessAiRequest implements ShouldQueue
             Log::error("Тест с ID {$this->testId} не найден.");
             return;
         }
-
         // Генерация теста с помощью AI
-        $testData = $aiService->generateTest($this->subject, $this->topic, $this->numQuestions);
+        $testData = $aiService->generateTest($this->subject, $this->topic, $this->difficult_level, $this->numQuestions);
 
         if (!$testData) {
             Log::error("AI не сгенерировал вопросы для теста ID {$this->testId}");
@@ -52,6 +53,7 @@ class ProcessAiRequest implements ShouldQueue
                 'question_text' => $questionData['question'],
                 'options' => json_encode($questionData['options']),
                 'correct_answer' => $questionData['correct'],
+                'explanation' => $questionData['explanation'], // объяснение
             ]);
         }
 

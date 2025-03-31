@@ -17,13 +17,14 @@ class AIService
         $this->api_key = Config::get('services.ai.api_key');
     }
 
-    public function generateTest($subject, $topic, $num_questions)
+    public function generateTest($subject, $topic, $difficult_level, $num_questions)
     {
-        $prompt = "Составь тест по предмету '$subject' на тему '$topic'. 
+        $prompt = "Составь тест по предмету '$subject' на тему '$topic' с уровнем сложности '$difficult_level'. 
         Тест должен состоять из $num_questions вопросов. 
-        У каждого вопроса 4 варианта ответа (A, B, C, D), где один правильный. 
-        Ответ в JSON-формате: 
-        [{'question': '...', 'options': ['A', 'B', 'C', 'D'], 'correct': 'A'}]";
+        У каждого вопроса 4 варианта ответа с указателями (A, B, C, D), где один вариант правильный. 
+        Оформи ответ в формате JSON-массива, где каждый элемент — объект с ключами: 
+        'question' (текст вопроса), 'options': ['A', 'B', 'C', 'D'], 'correct' (буква правильный ответа не должно быть всегда одинаковым), 
+        'explanation' (объяснение правильного ответа или решение задачи с использованием формул или общепринятых правил).";
 
         $response = Http::timeout(100)->withHeaders([
             'Authorization' => 'Bearer ' . $this->api_key,
@@ -33,7 +34,7 @@ class AIService
             'messages' => [['role' => 'user', 'content' => $prompt]],
             'model' => 'deepseek/deepseek-r1',
             'stream' => false,
-            'max_tokens' => 3000
+            'max_tokens' => 7000
         ]);
 
         if ($response->failed()) {

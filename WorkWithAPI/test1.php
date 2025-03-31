@@ -8,14 +8,15 @@ $num_questions = 20;
 $stream = false;
 $url = "https://openrouter.ai/api/v1/chat/completions";
 
-$api_key = "API key";
+$api_key = "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";
 
 // Формируем промпт
 $prompt = "Составь тест по предмету '$subject' на тему '$topic'. 
 Тест должен состоять из $num_questions вопросов. 
 У каждого вопроса 4 варианта ответа с указателями (A, B, C, D), где один вариант правильный. 
 Оформи ответ в формате JSON-массива, где каждый элемент — объект с ключами: 
-'question' (текст вопроса), 'options' (массив ответов), 'correct' (правильный ответ в виде буквы).";
+'question' (текст вопроса), 'options': ['A', 'B', 'C', 'D'], 'correct' (буква правильный ответа не должно быть всегда одинаковым), 
+'explanation' (объяснение правильного ответа или решение задачи с использованием формул или общепринятых правил).";
 
 $data = [
     "temperature" => 0.8,
@@ -25,7 +26,7 @@ $data = [
     "model" => "deepseek/deepseek-r1",
     "stream" => $stream,
     "frequency_penalty" => 0,
-    "max_tokens" => 4000
+    "max_tokens" => 6000
 ];
 
 $ch = curl_init($url);
@@ -83,6 +84,8 @@ foreach ($test_data as $index => $question) {
         echo "   $option\n";
     }
     echo "✅ Правильный ответ: " . $question["correct"] . "\n\n";
+    echo "✅ Правильный ответ: " . $question["explanation"] . "\n\n";
+
 }
 
 // Сохраняем тест в файл

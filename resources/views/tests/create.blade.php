@@ -20,6 +20,14 @@
                 <input type="text" name="topic" class="form-control" required>
             </div>
             <div class="mb-3">
+                <label class="form-label fw-bold">Сложность</label>
+                <select name="difficult_level" class="form-control">
+                    <option value="easy">Легкий</option>
+                    <option value="normal">Средний</option>
+                    <option value="difficult">Сложный</option>
+                </select>
+            </div>
+            <div class="mb-3">
                 <label class="form-label fw-bold">Количество вопросов</label>
                 <input type="number" name="num_questions" class="form-control" min="1" max="50" required>
             </div>
@@ -65,23 +73,37 @@ document.getElementById('test-form').addEventListener('submit', function(event) 
     });
 });
 
-// Функция рендеринга теста
+
+
 function renderTest(test, questions) {
+    console.log("Полученные вопросы:", questions); // Проверяем данные в консоли
+
     let container = document.getElementById('test-container');
     container.innerHTML = `
         <h3 class="text-primary text-center">📘 ${test.title}</h3>
         <p class="text-muted text-center">${test.description}</p>
-        ${questions.map((question, index) => `
-            <div class="card mt-3 p-3">
-                <strong class="fs-5">${index + 1}. ${question.question_text}</strong>
-                <ul class="list-group mt-2">
-                    ${JSON.parse(question.options).map(option => `<li class="list-group-item">${option}</li>`).join('')}
-                </ul>
-                <p class="mt-2 text-success fw-bold">✅ Правильный ответ: ${question.correct_answer}</p>
-            </div>
-        `).join('')}
+        ${questions.map((question, index) => {
+            try {
+                let options = JSON.parse(question.options); // Парсим варианты
+                return `
+                    <div class="card mt-3 p-3">
+                        <strong class="fs-5">${index + 1}. ${question.question || question.question_text}</strong>
+                        <ul class="list-group mt-2">
+                            ${options.map(option => `<li class="list-group-item">${option}</li>`).join('')}
+                        </ul>
+                        <p class="mt-2 text-success fw-bold">✅ Правильный ответ: ${question.correct || question.correct_answer}</p>
+                        <p class="mt-2 text-info"><strong>ℹ️ Объяснение:</strong> ${question.explanation || "Нет объяснения"}</p>
+                    </div>
+                `;
+            } catch (e) {
+                console.error("Ошибка парсинга JSON вариантов ответа:", e, question);
+                return `<p class="text-danger">Ошибка загрузки вопроса</p>`;
+            }
+        }).join('')}
     `;
     container.style.display = 'block';
 }
+
+
 </script>
 @endsection
