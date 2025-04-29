@@ -9,7 +9,7 @@ class Question extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['test_id', 'question_text', 'options', 'correct_answer', 'explanation'];
+    protected $fillable = ['test_id', 'question_text', 'options', 'correct_index', 'explanation'];
 
     protected $casts = [
         'options' => 'array', // Автоматическое преобразование JSON в массив
@@ -18,5 +18,12 @@ class Question extends Model
     public function test()
     {
         return $this->belongsTo(Test::class);
+    }
+
+
+
+    public function mistakes()
+    {
+        return $this->hasMany(Mistake::class);
     }
 }

@@ -17,4 +17,8 @@ class User extends Authenticatable
     {
         return $this->hasMany(Test::class);
     }
+    public function mistakes()
+    {
+        return $this->hasMany(Mistake::class);
+    }
 }

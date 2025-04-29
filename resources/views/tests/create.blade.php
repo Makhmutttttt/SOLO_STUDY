@@ -91,7 +91,9 @@ function renderTest(test, questions) {
                         <ul class="list-group mt-2">
                             ${options.map(option => `<li class="list-group-item">${option}</li>`).join('')}
                         </ul>
-                        <p class="mt-2 text-success fw-bold">✅ Правильный ответ: ${question.correct || question.correct_answer}</p>
+                        <p class="mt-2 text-success fw-bold">
+                            ✅ Правильный ответ: ${options[question.correct_index ?? question.correct]}
+                        </p>                        
                         <p class="mt-2 text-info"><strong>ℹ️ Объяснение:</strong> ${question.explanation || "Нет объяснения"}</p>
                     </div>
                 `;

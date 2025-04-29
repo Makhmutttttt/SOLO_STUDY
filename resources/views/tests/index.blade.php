@@ -40,7 +40,12 @@
                             @if($test->status === 'pending')
                                 <span class="badge bg-warning">⏳ Ожидает генерации</span>
                             @else
-                                <a href="{{ route('tests.show', $test->id) }}" class="btn btn-primary">Пройти тест</a>
+                            <form action="{{ route('test.start', $test->id) }}" method="POST">
+                                @csrf
+                                <button type="submit" class="btn btn-primary w-100">
+                                    ▶️ Начать тест
+                                </button>
+                            </form>
                             @endif
                         </div>
                     @endforeach

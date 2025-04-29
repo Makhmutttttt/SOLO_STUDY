@@ -48,11 +48,15 @@ class ProcessAiRequest implements ShouldQueue
 
         // Записываем вопросы в БД
         foreach ($testData as $questionData) {
+            $options = $questionData['options'];
+            $correctLetter = strtoupper(trim($questionData['correct']));
+            $correctIndex = array_search($correctLetter, ['A', 'B', 'C', 'D']);
+
             Question::create([
                 'test_id' => $test->id,
                 'question_text' => $questionData['question'],
                 'options' => json_encode($questionData['options']),
-                'correct_answer' => $questionData['correct'],
+                'correct_index' => $correctIndex,
                 'explanation' => $questionData['explanation'], // объяснение
             ]);
         }
