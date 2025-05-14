@@ -21,14 +21,22 @@ class ProcessAiRequest implements ShouldQueue
     protected $topic;
     protected $difficult_level;
     protected $numQuestions;
+    protected $content;
+    protected $ready_test;
 
-    public function __construct($testId, $subject, $topic, $difficult_level, $numQuestions)
+
+    public function __construct($testId, $subject, $topic, $difficult_level, $numQuestions, $content = null, $ready_test = null)
     {
         $this->testId = $testId;
         $this->subject = $subject;
         $this->topic = $topic;
         $this->difficult_level = $difficult_level;
         $this->numQuestions = $numQuestions;
+        $this->content = $content;
+        $this->ready_test = $ready_test;
+
+        // Указываем, что задача будет обрабатываться в очереди 'ai'
+        $this->onQueue('ai');
     }
 
     public function handle(AIService $aiService)
@@ -39,8 +47,15 @@ class ProcessAiRequest implements ShouldQueue
             return;
         }
         // Генерация теста с помощью AI
-        $testData = $aiService->generateTest($this->subject, $this->topic, $this->difficult_level, $this->numQuestions);
+        $testData = $aiService->generateTest(
+            $this->subject,
+            $this->topic,
+            $this->difficult_level,
+            $this->numQuestions,
+            $this->content, // 👈 Передаем content
+            $this->ready_test // 👈 передаём сюда
 
+        );
         if (!$testData) {
             Log::error("AI не сгенерировал вопросы для теста ID {$this->testId}");
             return;

@@ -14,10 +14,10 @@
                     <a class="nav-link" href="{{ url('/tests/create') }}">Test AI</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url('/tests/create-excel') }}">Test Excel</a>
+                    <a class="nav-link" href="{{ url('/tests/create-excel') }}">Test with text</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url('/tests/create-manual') }}">Test Manually</a>
+                    <a class="nav-link" href="{{ url('/tests/create-manual') }}">Mistakes</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url('/profile') }}">My Profile</a>

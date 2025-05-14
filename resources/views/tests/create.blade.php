@@ -31,6 +31,22 @@
                 <label class="form-label fw-bold">Количество вопросов</label>
                 <input type="number" name="num_questions" class="form-control" min="1" max="50" required>
             </div>
+
+            <!-- 🔽 Добавленное поле content -->
+            <div class="mb-3">
+                <label class="form-label fw-bold">Дополнительный текст (например, лекция или описание темы)</label>
+                <textarea name="content" class="form-control" rows="5" placeholder="Опционально: сюда можно вставить текст, по которому будет составлен тест..."></textarea>
+            </div>
+
+
+
+            {{-- <div class="mb-3">
+                <label class="form-label fw-bold">Готовый тестовые записи (например, готовые вопросы с вариянтами ответа с указанием еденицой правильного ответа)</label>
+                <textarea name="ready_test" class="form-control" rows="5" placeholder="Опционально: сюда можно вставить тестовые вопросы, по которому будет составлен тест..."></textarea>
+            </div> --}}
+
+
+
             <button type="submit" class="btn btn-primary w-100">Создать тест</button>
         </form>
 
@@ -75,8 +91,41 @@ document.getElementById('test-form').addEventListener('submit', function(event) 
 
 
 
+// function renderTest(test, questions) {
+//     console.log("Полученные вопросы:", questions); // Проверяем данные в консоли
+
+//     let container = document.getElementById('test-container');
+//     container.innerHTML = `
+//         <h3 class="text-primary text-center">📘 ${test.title}</h3>
+//         <p class="text-muted text-center">${test.description}</p>
+//         ${questions.map((question, index) => {
+//             try {
+//                 let options = JSON.parse(question.options); // Парсим варианты
+//                 return `
+//                     <div class="card mt-3 p-3">
+//                         <strong class="fs-5">${index + 1}. ${question.question || question.question_text}</strong>
+//                         <ul class="list-group mt-2">
+//                             ${options.map(option => `<li class="list-group-item">${option}</li>`).join('')}
+//                         </ul>
+//                         <p class="mt-2 text-success fw-bold">
+//                             ✅ Правильный ответ: ${options[question.correct_index ?? question.correct]}
+//                         </p>                        
+//                         <p class="mt-2 text-info"><strong>ℹ️ Объяснение:</strong> ${question.explanation || "Нет объяснения"}</p>
+//                     </div>
+//                 `;
+//             } catch (e) {
+//                 console.error("Ошибка парсинга JSON вариантов ответа:", e, question);
+//                 return `<p class="text-danger">Ошибка загрузки вопроса</p>`;
+//             }
+//         }).join('')}
+//     `;
+//     container.style.display = 'block';
+// }
+
+
+
 function renderTest(test, questions) {
-    console.log("Полученные вопросы:", questions); // Проверяем данные в консоли
+    console.log("Полученные вопросы:", questions);
 
     let container = document.getElementById('test-container');
     container.innerHTML = `
@@ -84,7 +133,7 @@ function renderTest(test, questions) {
         <p class="text-muted text-center">${test.description}</p>
         ${questions.map((question, index) => {
             try {
-                let options = JSON.parse(question.options); // Парсим варианты
+                let options = JSON.parse(question.options);
                 return `
                     <div class="card mt-3 p-3">
                         <strong class="fs-5">${index + 1}. ${question.question || question.question_text}</strong>
@@ -102,7 +151,15 @@ function renderTest(test, questions) {
                 return `<p class="text-danger">Ошибка загрузки вопроса</p>`;
             }
         }).join('')}
+
+        <form action="/tests/${test.id}/start" method="POST" class="mt-4 text-center">
+            <input type="hidden" name="_token" value="${document.querySelector('meta[name="csrf-token"]').getAttribute('content')}">
+            <button type="submit" class="btn btn-success btn-lg">
+                🚀 Пройти этот тест сейчас
+            </button>
+        </form>
     `;
+
     container.style.display = 'block';
 }
 

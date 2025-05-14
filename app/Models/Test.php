@@ -10,7 +10,7 @@ class Test extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'description', 'status', 'user_id', 'num_questions'];
+    protected $fillable = ['title', 'description', 'status', 'user_id', 'num_questions', 'difficulty_level', 'content', 'ready_test'];
 
 
     // Один тест принадлежит одному пользователю

@@ -47,6 +47,15 @@
                                 </button>
                             </form>
                             @endif
+
+                            <form action="{{ route('test.destroy', $test->id) }}" method="POST" onsubmit="return confirm('Удалить этот тест?')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger w-100">
+                                    🗑️ Удалить тест
+                                </button>
+                            </form>       
+
                         </div>
                     @endforeach
 
