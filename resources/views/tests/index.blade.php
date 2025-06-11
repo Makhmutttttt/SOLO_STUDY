@@ -21,17 +21,13 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {{-- @foreach($tests as $test)
-                        <tr>
-                            <td>{{ $test->title }}</td>
-                            <td>{{ $test->description }}</td>
-                            <td class="text-center">
-                                <a href="{{ url('/tests/' . $test->id . '/start') }}" class="btn btn-primary btn-sm">
-                                    <i class="fas fa-play"></i> Пройти тест
-                                </a>
-                            </td>
-                        </tr>
-                    @endforeach --}}
+
+
+
+
+                    <a href="{{ route('mistakes.pass') }}" class="btn btn-warning mb-3">
+                        🛠 Работа над ошибками
+                    </a>
                     @foreach($tests as $test)
                         <div class="card mt-3 p-3 {{ $test->status === 'pending' ? 'text-muted' : '' }}">
                             <h3>{{ $test->title }}</h3>

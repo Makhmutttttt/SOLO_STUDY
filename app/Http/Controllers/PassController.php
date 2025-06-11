@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Test;
 use App\Models\Question;
 use App\Models\Mistake;
+use App\Models\TestResult;
 use Illuminate\Support\Facades\Auth;
 
 class PassController extends Controller
@@ -53,29 +54,6 @@ class PassController extends Controller
         ]);
     }
 
-    // public function showQuestion()
-    // {
-    //     $session = session('current_test');
-    //     $questionId = $session['questions'][$session['current_question']];
-    //     $question = Question::findOrFail($questionId);
-    
-    //     // Перемешиваем варианты и сохраняем порядок в сессии
-    //     $originalOptions = json_decode($question->options, true);
-    //     $shuffledOptions = $originalOptions;
-    //     shuffle($shuffledOptions);
-    
-    //     // Сохраняем порядок перемешанных вариантов
-    //     $session['option_order'][$questionId] = $shuffledOptions;
-    //     session()->put('current_test', $session);
-    
-    //     return view('tests.pass', [
-    //         'question' => $question,
-    //         'options' => $shuffledOptions,
-    //         'progress' => ($session['current_question'] / count($session['questions'])) * 100
-    //     ]);
-    // }
-    
-
     public function processAnswer(Request $request)
     {
         $session = session('current_test');
@@ -106,48 +84,7 @@ class PassController extends Controller
         return redirect()->route('test.finish');
     }
 
-    // public function processAnswer(Request $request)
-    // {
-    //     $session = session('current_test');
-    //     $questionId = $session['questions'][$session['current_question']];
-    //     $question = Question::findOrFail($questionId);
-    
-    //     $index = $request->input('answer'); // индекс в перемешанном массиве
-    
-    //     if (!isset($session['option_order'][$questionId][$index])) {
-    //         abort(400, 'Некорректный выбор варианта.');
-    //     }
-    
-    //     $selectedText = $session['option_order'][$questionId][$index];
-    
-    //     $originalOptions = json_decode($question->options, true);
-    //     $correctText = $originalOptions[$question->correct_index];
-    
-    //     $isCorrect = $selectedText === $correctText;
-    
-    //     $session['answers'][$questionId] = [
-    //         'selected_index' => $index,
-    //         'selected_text' => $selectedText,
-    //         'correct_text' => $correctText,
-    //         'correct' => $isCorrect
-    //     ];
-    
-    //     session()->put('current_test', $session);
-    
-    //     if (!$isCorrect) {
-    //         $this->handleMistake($question);
-    //     } else {
-    //         $this->handleCorrectAnswer($question);
-    //     }
-    
-    //     if ($session['current_question'] < count($session['questions']) - 1) {
-    //         $session['current_question']++;
-    //         session()->put('current_test', $session);
-    //         return redirect()->route('test.question');
-    //     }
-    
-    //     return redirect()->route('test.finish');
-    // }
+
      
 
     private function handleMistake(Question $question)
@@ -173,22 +110,37 @@ class PassController extends Controller
         }
     }
 
+    // PassController.php
     public function finish()
     {
         $session = session('current_test');
         $test = Test::findOrFail($session['test_id']);
         $answers = $session['answers'];
         
-        // Подсчет результатов
         $correctCount = collect($answers)->filter(fn($a) => $a['correct'])->count();
-        
-        // Сохранение результатов (можно создать отдельную модель TestResult)
-        
+        $total = count($session['questions']);
+
+        // Сохраняем результат только если тест пройден полностью
+        if ($total > 0) {
+            TestResult::create([
+                'user_id' => auth()->id(),
+                'test_id' => $test->id,
+                'score' => $correctCount,
+                'total_questions' => $total,
+                'completed_at' => now()
+            ]);
+        }
+
+        // Очищаем сессию текущего теста
+        session()->forget('current_test');
+
         return view('tests.results', [
             'test' => $test,
             'correctCount' => $correctCount,
-            'total' => count($session['questions']),
+            'total' => $total,
             'wrongAnswers' => collect($answers)->filter(fn($a) => !$a['correct'])
         ]);
     }
+
+
 }

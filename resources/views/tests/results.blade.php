@@ -1,7 +1,3 @@
-
-
-
-
 @extends('layouts.app')
 
 @section('title', 'Результаты теста')
@@ -40,14 +36,10 @@
                                     <h5 class="card-title">{{ $question->question_text }}</h5>
                                     <p class="text-danger">
                                         Ваш ответ: {{ Arr::get($options, $answer['selected'] ?? 'none', 'Нет ответа') }}
-                                        {{-- Ваш ответ: {{ $answer['selected_text'] ?? 'Нет ответа' }} --}}
-
                                     </p>
                                     
                                     <p class="text-success">
                                         Правильный ответ: {{ Arr::get($options, $question->correct_index, 'Ошибка системы') }}
-                                        {{-- Правильный ответ: {{ $answer['correct_text'] ?? 'Ошибка системы' }} --}}
-
                                     </p>
                                     @if($question->explanation)
                                         <div class="alert alert-info mt-2">

@@ -22,4 +22,12 @@ class Test extends Model
     {
         return $this->hasMany(Question::class);
     }
+    public function results() {
+        return $this->hasMany(TestResult::class);
+    }
+    // app/Models/Test.php
+    public function testResults()
+    {
+        return $this->hasMany(TestResult::class);
+    }
 }

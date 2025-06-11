@@ -21,4 +21,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Mistake::class);
     }
+    public function testResults()
+    {
+        return $this->hasMany(TestResult::class);
+    }
+
 }

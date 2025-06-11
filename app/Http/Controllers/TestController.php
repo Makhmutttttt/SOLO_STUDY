@@ -107,13 +107,6 @@ class TestController extends Controller
     }
 
 
-    // public function destroy($id)
-    // {
-    //     $test = Test::findOrFail($id);
-    //     $test->delete();
-    //     return redirect()->back()->with('success', 'Тест удалён.');
-    // }
-
 
     public function destroy($id)
     {

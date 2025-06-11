@@ -50,17 +50,7 @@
                 </div>
             </form>
 
-            {{-- <form method="POST" action="{{ route('test.answer') }}">
-                @csrf
-                @foreach ($options as $index => $option)
-                    <label class="d-block mb-2">
-                        <input type="radio" name="answer" value="{{ $index }}" required>
-                        {{ $option }}
-                    </label>
-                @endforeach
-            
-                <button type="submit" class="btn btn-success mt-3">Ответить</button>
-            </form> --}}
+
             
         </div>
     </div>
