@@ -25,7 +25,24 @@
                             <strong>Дата регистрации:</strong> {{ $user->created_at->format('d.m.Y') }}
                         </div>
                     </div>
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="btn btn-danger mt-3">
+                            🚪 Выйти из аккаунта
+                        </button>
+                    </form>
+                    
+                    <!-- Кнопка в профиле -->
+                    {{-- <form action="/start-queue" method="POST">
+                        @csrf
+                        <button type="submit">Запустить обработчик</button>
+                    </form> --}}
+
+
+
                 </div>
+
+
                 
                 <div class="col-md-6">
                     <h4 class="text-primary">📊 Статистика</h4>

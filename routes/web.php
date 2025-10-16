@@ -7,6 +7,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MistakeWorkController;
 use App\Http\Controllers\MistakeController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\QueueController;
 
 Route::get('/', function () {
     return redirect()->route('login'); // если маршрут login имеет имя
@@ -39,6 +40,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/tests/input-issues', [MistakeController::class, 'index'])->name('mistakes.index');
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile')->middleware('auth');
     
+    Route::post('/start-queue', [QueueController::class, 'start'])->middleware('auth');
+
     Route::prefix('mistakes')->middleware(['auth'])->group(function () {
         Route::get('pass', [MistakeWorkController::class, 'pass'])->name('mistakes.pass');
         Route::post('answer', [MistakeWorkController::class, 'submitAnswer'])->name('mistakes.answer');

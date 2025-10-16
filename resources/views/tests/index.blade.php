@@ -28,32 +28,38 @@
                     <a href="{{ route('mistakes.pass') }}" class="btn btn-warning mb-3">
                         🛠 Работа над ошибками
                     </a>
-                    @foreach($tests as $test)
-                        <div class="card mt-3 p-3 {{ $test->status === 'pending' ? 'text-muted' : '' }}">
-                            <h3>{{ $test->title }}</h3>
-                            <p>{{ $test->description }}</p>
-                            
-                            @if($test->status === 'pending')
-                                <span class="badge bg-warning">⏳ Ожидает генерации</span>
-                            @else
-                            <form action="{{ route('test.start', $test->id) }}" method="POST">
-                                @csrf
-                                <button type="submit" class="btn btn-primary w-100">
-                                    ▶️ Начать тест
-                                </button>
-                            </form>
-                            @endif
+                    <div class="container mt-4">
+                        <div class="row">
+                            @foreach($tests as $test)
+                                <div class="col-md-6 mb-4">
+                                    <div class="card h-100 d-flex flex-column justify-content-between">
+                                        <div class="card-body">
+                                            <h5 class="card-title">{{ $test->title }}</h5>
+                                            <p class="card-text">{{ $test->description }}</p>
+                                        </div>
 
-                            <form action="{{ route('test.destroy', $test->id) }}" method="POST" onsubmit="return confirm('Удалить этот тест?')">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger w-100">
-                                    🗑️ Удалить тест
-                                </button>
-                            </form>       
+                                        <div class="card-footer bg-white border-0 text-center">
+                                            <form action="{{ route('test.start', $test->id) }}" method="POST" class="mb-2">
+                                                @csrf
+                                                <button type="submit" class="btn btn-success w-50 mx-auto d-block">
+                                                    ▶️ Начать тест
+                                                </button>
+                                            </form>
 
+                                            <form action="{{ route('test.destroy', $test->id) }}" method="POST"
+                                                onsubmit="return confirm('Удалить этот тест?')">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger w-50 mx-auto d-block">
+                                                    🗑️ Удалить тест
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
                         </div>
-                    @endforeach
+                    </div>
 
                 </tbody>
             </table>

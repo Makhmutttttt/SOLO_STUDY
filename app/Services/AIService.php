@@ -62,12 +62,26 @@ class AIService
             'max_tokens' => 7000
         ]);
 
+        // file_put_contents(storage_path('logs/deepseek_raw.log'), $response->body());
+        // Log::info('Ответ от DeepSeek записан в deepseek_raw.log');
+
         if ($response->failed()) {
             Log::error("Ошибка при отправке запроса в AI: " . $response->body());
             return null;
         }
 
         $data = $response->json();
+
+/////////////////
+
+        // // 🧾 Логирование использования токенов (если API вернул данные)
+        // if (isset($data['usage'])) {
+        //     Log::info("🔹 AI usage info: prompt_tokens={$data['usage']['prompt_tokens']}, completion_tokens={$data['usage']['completion_tokens']}, total_tokens={$data['usage']['total_tokens']}");
+        // } else {
+        //     Log::warning("⚠️ AI usage data отсутствует в ответе API");
+        // }
+////////////
+
 
         if (!isset($data["choices"][0]["message"]["content"])) {
             Log::error("AI не вернул ожидаемый JSON.");
